@@ -10,14 +10,14 @@ your distribution that your program is a modification of the original and give
 clear reference where someone might download the original version if needed, which
 is this repository.
 
-###### logo contributed by myusuf
-![myusuf logo](/images/myusuf-logo.jpg)
-
-###### logo contributed by Suleiman Tsamiya
-![Suleiman Tsamiya logo](/images/Suleiman-Tsamiya-logo.jpg)
-
 ###### logos contributed by Tobias HT
 ![kozesa](/images/kozesa.png)
 ![kozesa darkblue](/images/kozesa-darkblue.png)
 ![kozesa lightblue](/images/kozesa-lightblue.png)
 ![kozesa orange](/images/kozesa-orange.png)
+
+###### logo contributed by myusuf
+![myusuf logo](/images/myusuf-logo.jpg)
+
+###### logo contributed by Suleiman Tsamiya
+![Suleiman Tsamiya logo](/images/Suleiman-Tsamiya-logo.jpg)
