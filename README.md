@@ -2,7 +2,7 @@
 ### Business Software Suite
 
 #### ====== NOTICE ======
-This is a collection of 6 applications targeting the business sector.
+This is a collection of application software targeting the business sector.
 The applications in this suite are free and open source, signed with a liberal
 MIT license, so they can be used for commercial purposes. 
 If you modify any of the software in this suite however, stipulate somewhere in 
