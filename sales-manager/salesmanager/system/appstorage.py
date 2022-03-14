@@ -24,17 +24,21 @@ if platform.system() == "Windows":
 else:
     raise OSError("unsupported operating system")
 
-class Account:
+class BaseAccount:
     
     def __init__(self,acc_file:Path):
         self.acc_file = acc_file
 
 
-class AdminAccount(Account):
+class AdminAccount(BaseAccount):
     
     def __init__(self,acc_file:Path):
         super(AdminAccount,self).__init__(acc_file)
         
+class EmployeeAccount(BaseAccount):
+
+    def __init__(self,acc_file:Path):
+        super(EmployeeAccount,self).__init__(acc_file)
     
 class AccountManager:
 
@@ -62,7 +66,11 @@ class AccountManager:
     def setup(self):
         return self._setup
         
-    def create(self, user_name:str, password:str,*,admin = False) -> Account:
+    def create(self, user_name:str, password:str,*,admin = False) -> BaseAccount:
+        """ Use the user_name and password to create an account file.
+            The username and password are hashed using blake2b. The result is
+            combined and separated by a hyphen.
+        """
         
         user_name_enc = blake2b(user_name.encode(),digest_size = 10).hexdigest()
         password_enc = blake2b(password.encode(),digest_size = 10).hexdigest()
@@ -70,7 +78,7 @@ class AccountManager:
             return None
         acc_name = "-".join([user_name_enc,password_enc]) if admin is False else "-".join(["ADMIN",user_name_enc,password_enc])
         new_acc_file = self.account_dir/acc_name
-        new_acc_file.open("w").close()
+        os.open(str(new_acc_file),os.O_CREAT)
         if admin:
             if self._setup:
                 raise AdminExists("admin account already exists")
@@ -81,9 +89,10 @@ class AccountManager:
         return Account(new_acc_file)
         
 
-    def load(self, user_name:str, password:bytes,*,admin = False) -> Account:
+    def load(self, user_name:str, password:bytes,*,admin = False) -> BaseAccount:
         """
-        load account from self.accounts or load the admin account
+        load account from self.accounts or load the admin account. Hashes the user_name
+        and password and compares if the hash exists in the accounts dictionary
         """        
         user_name_enc = blake2b(user_name.encode(),digest_size = 10).hexdigest()
         password_enc = blake2b(password.encode(),digest_size = 10).hexdigest()
