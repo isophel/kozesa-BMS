@@ -14,7 +14,7 @@ sys.path.append(r"C:\Users\user\Desktop\OpenSourceCode\kozesa-BMS\sales-manager"
 from salesmanager.system.appstorage import AdminAccount,AccountManager
 from pathlib import Path
 
-#============= Testing ===================================
+#=================== Testing ===================================
 from kivymd.app import MDApp
 import os
 
@@ -25,10 +25,12 @@ page_layout = r"""
     emp_user_entry:userentry
     emp_password_entry:passwordentry
     orientation:"vertical"
-    pos_hint:{"x":0.5,"y":0.5}
-    size_hint:(0.5,0.7)
+    pos_hint:{"x":0.25,"y":0.4}
+    size_hint:(0.5,0.6)
+    spacing:5
     Image:
         source:r"C:\Users\user\Desktop\OpenSourceCode\kozesa-BMS\sales-manager\salesmanager\res\kozesa-orange-nobg.png"
+        pos_hint:{"x":0,"y":0}
     MDTextField:
         id:userentry
         multiline:False
@@ -39,24 +41,36 @@ page_layout = r"""
         hint_text:"password"
         multiline:False
         on_text_validate:loginform.emp_password_validate(*args)
+    MDRaisedButton:
+        text:"login"
+        on_release:loginform.emp_login()
+        size_hint_x:1
         
 <AdminCreationForm>:
     id:admform
     orientation:"vertical"
     adm_name_entry:admnameentry
     adm_password_entry:admpasswordentry
-    pos_hint:{"x":0.5,"y":0.5}
-    size_hint:(0.5,0.7)
+    pos_hint:{"x":0.25,"y":0.4}
+    size_hint:(0.5,0.6)
+    spacing:5
     Image:
         source:r"C:\Users\user\Desktop\OpenSourceCode\kozesa-BMS\sales-manager\salesmanager\res\kozesa-orange-nobg.png"
+        pos_hint:{"x":0,"y":0}
     MDTextField:
         id:admnameentry
         multiline:False
+        hint_text:"admin name"
         on_text_validate:admform.adm_name_validate(*args)
     MDTextField:
         id:admpasswordentry
         multiline:False
+        hint_text:"admin password"
         on_text_validate:admform.adm_password_validate(*args)
+    MDRaisedButton:
+        text:"create"
+        on_release:admform.createAdmin()
+        size_hint_x:1
 """
 
 Builder.load_string(page_layout)
@@ -72,7 +86,7 @@ class LoginPage (MDFloatLayout):
                                                         on_release = lambda inst:self.login_menu.open()
                                                         )
             self.add_widget(LoginForm(acc_manager,login_function))
-            self.add_widget(menu_button)
+            self.add_widget(self.menu_button)
         else:
             self.add_widget(AdminCreationForm(acc_manager,adm_panelopen_function))
     
@@ -98,8 +112,12 @@ class LoginForm (MDBoxLayout):
         self._validate()
         return
         
+    def emp_login (self) -> None:
+        if self.emp_user and self.emp_password:
+            self._validate()
+        
     def _validate (self):
-        pass
+        self.login_function(self.emp_user,self.emp_password)
         
 class AdminCreationForm (MDBoxLayout):
     adm_name_entry = ObjectProperty()
@@ -124,20 +142,25 @@ class AdminCreationForm (MDBoxLayout):
         return
     
     def createAdmin (self):
-        pass
+        if self.adm_name and self.adm_password:
+            self.adm_panelopen_function(self.adm_name,self.adm_password)
 
 class LoginMenu (MDDropdownMenu):
-    pass
     
+    def __init__(self,adm_panelopen_function):
+        self.adm_panelopen_function = adm_panelopen_function
+ 
+#============================== Testing ==========================================
 if __name__ == "__main__":
     
     accman = AccountManager(Path(os.getcwd()))
     
-    def logfunc ():
+    def logfunc (name,password):
         print("logging...")
         
-    def AdmCreateFunc ():
+    def AdmCreateFunc (name,password):
         print("creating admin...")
+        accman.create(name,password,admin = True)
         
     class TestApp(MDApp):
         def __init__(self):
