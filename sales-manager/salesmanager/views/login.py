@@ -7,6 +7,7 @@ from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.button import MDFloatingActionButton
 from kivymd.uix.menu import MDDropdownMenu
+from kivymd.uix.list import OneLineIconListItem,IconLeftWidget
 
 import sys
 sys.path.append(r"C:\Users\user\Desktop\OpenSourceCode\kozesa-BMS\sales-manager") #part of testing code.
@@ -31,15 +32,23 @@ page_layout = r"""
     Image:
         source:r"C:\Users\user\Desktop\OpenSourceCode\kozesa-BMS\sales-manager\salesmanager\res\kozesa-orange-nobg.png"
         pos_hint:{"x":0,"y":0}
+    MDLabel:
+        text:"Employee Login."
+        font_style:"H4"
     MDTextField:
         id:userentry
         multiline:False
         hint_text:"user name"
+        icon_right:"account"
+        icon_right_color_focus:app.theme_cls.primary_color
         on_text_validate:loginform.emp_user_validate(*args)
     MDTextField:
         id:passwordentry
         hint_text:"password"
         multiline:False
+        password:True
+        icon_right:"key"
+        icon_right_color_focus:app.theme_cls.primary_color
         on_text_validate:loginform.emp_password_validate(*args)
     MDRaisedButton:
         text:"login"
@@ -57,20 +66,30 @@ page_layout = r"""
     Image:
         source:r"C:\Users\user\Desktop\OpenSourceCode\kozesa-BMS\sales-manager\salesmanager\res\kozesa-orange-nobg.png"
         pos_hint:{"x":0,"y":0}
+    MDLabel:
+        text:"Create Admin Account to proceed."
+        font_style:"H4"
     MDTextField:
         id:admnameentry
         multiline:False
         hint_text:"admin name"
+        icon_right:"account"
         on_text_validate:admform.adm_name_validate(*args)
     MDTextField:
         id:admpasswordentry
         multiline:False
         hint_text:"admin password"
+        password:True
+        icon_right:"key"
         on_text_validate:admform.adm_password_validate(*args)
     MDRaisedButton:
         text:"create"
         on_release:admform.createAdmin()
         size_hint_x:1
+        
+<LoginMenuItem>:
+    text:self.text
+    
 """
 
 Builder.load_string(page_layout)
@@ -123,7 +142,7 @@ class AdminCreationForm (MDBoxLayout):
     adm_name_entry = ObjectProperty()
     adm_password_entry = ObjectProperty()
     
-    def __init__(self,acc_manager,adm_panelopen_function):
+    def __init__ (self,acc_manager,adm_panelopen_function) -> None:
         super (AdminCreationForm,self).__init__()
         self.acc_manager = acc_manager
         self.adm_panelopen_function = adm_panelopen_function
@@ -141,8 +160,12 @@ class AdminCreationForm (MDBoxLayout):
         self.createAdmin()
         return
     
-    def createAdmin (self):
+    def createAdmin (self) -> None:
         if self.adm_name and self.adm_password:
+            self.adm_panelopen_function(self.adm_name,self.adm_password)
+        else:
+            self.adm_name = self.adm_name_entry.text
+            self.adm_password = self.adm_password_entry.text
             self.adm_panelopen_function(self.adm_name,self.adm_password)
 
 class LoginMenu (MDDropdownMenu):
@@ -150,6 +173,8 @@ class LoginMenu (MDDropdownMenu):
     def __init__(self,adm_panelopen_function):
         self.adm_panelopen_function = adm_panelopen_function
  
+class LoginMenuItem(OneLineIconListItem):
+    pass
 #============================== Testing ==========================================
 if __name__ == "__main__":
     
