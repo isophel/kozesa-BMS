@@ -1,19 +1,18 @@
-from salesmanager.system.appstorage import AdminAccount, AccountManager
 import os
-from kivymd.app import MDApp
+import sys
 from pathlib import Path
+
 from kivy.lang.builder import Builder
 from kivy.properties import ObjectProperty
 from kivy.uix.image import Image
-
+from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.floatlayout import MDFloatLayout
-from kivymd.uix.textfield import MDTextField
 from kivymd.uix.button import MDFloatingActionButton
+from kivymd.uix.floatlayout import MDFloatLayout
+from kivymd.uix.list import IconLeftWidget, OneLineIconListItem
 from kivymd.uix.menu import MDDropdownMenu
-from kivymd.uix.list import OneLineIconListItem, IconLeftWidget
-
-import sys
+from kivymd.uix.textfield import MDTextField
+from salesmanager.system.appstorage import AccountManager, AdminAccount
 
 # part of testing code.
 sys.path.append(r"C:\Users\user\Desktop\OpenSourceCode\kozesa-BMS\sales-manager")

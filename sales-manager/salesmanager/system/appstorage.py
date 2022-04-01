@@ -1,9 +1,9 @@
-import os
 import json
+import os
 import platform
-from pathlib import Path
 from configparser import ConfigParser
 from hashlib import blake2b
+from pathlib import Path
 from typing import Final
 
 # Prepare the environment
