@@ -1,3 +1,7 @@
+from salesmanager.system.appstorage import AdminAccount, AccountManager
+import os
+from kivymd.app import MDApp
+from pathlib import Path
 from kivy.lang.builder import Builder
 from kivy.properties import ObjectProperty
 from kivy.uix.image import Image
@@ -7,17 +11,15 @@ from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.button import MDFloatingActionButton
 from kivymd.uix.menu import MDDropdownMenu
-from kivymd.uix.list import OneLineIconListItem,IconLeftWidget
+from kivymd.uix.list import OneLineIconListItem, IconLeftWidget
 
 import sys
-sys.path.append(r"C:\Users\user\Desktop\OpenSourceCode\kozesa-BMS\sales-manager") #part of testing code.
+# part of testing code.
+sys.path.append(
+    r"C:\Users\user\Desktop\OpenSourceCode\kozesa-BMS\sales-manager")
 
-from salesmanager.system.appstorage import AdminAccount,AccountManager
-from pathlib import Path
 
-#=================== Testing ===================================
-from kivymd.app import MDApp
-import os
+# =================== Testing ===================================
 
 
 page_layout = r"""
@@ -94,105 +96,111 @@ page_layout = r"""
 
 Builder.load_string(page_layout)
 
+
 class LoginPage (MDFloatLayout):
-    def __init__(self,acc_manager,login_function,adm_panelopen_function):
-        super (LoginPage,self).__init__()
+    def __init__(self, acc_manager, login_function, adm_panelopen_function):
+        super(LoginPage, self).__init__()
         self.acc_manager = acc_manager
         if self.acc_manager.setup:
             self.login_menu = LoginMenu(adm_panelopen_function)
-            self.menu_button = MDFloatingActionButton(pos_hint = {"x":0.9,"y":0.1},
-                                                        icon = "format-list-bulleted",
-                                                        on_release = lambda inst:self.login_menu.open()
-                                                        )
-            self.add_widget(LoginForm(acc_manager,login_function))
+            self.menu_button = MDFloatingActionButton(pos_hint={"x": 0.9, "y": 0.1},
+                                                      icon="format-list-bulleted",
+                                                      on_release=lambda inst: self.login_menu.open()
+                                                      )
+            self.add_widget(LoginForm(acc_manager, login_function))
             self.add_widget(self.menu_button)
         else:
-            self.add_widget(AdminCreationForm(acc_manager,adm_panelopen_function))
-    
+            self.add_widget(AdminCreationForm(
+                acc_manager, adm_panelopen_function))
+
+
 class LoginForm (MDBoxLayout):
-    emp_user_entry = ObjectProperty ()
-    emp_password_entry = ObjectProperty ()
-    
-    def __init__ (self,acc_manager,login_function):
-        super (LoginForm,self).__init__()
+    emp_user_entry = ObjectProperty()
+    emp_password_entry = ObjectProperty()
+
+    def __init__(self, acc_manager, login_function):
+        super(LoginForm, self).__init__()
         self.acc_manager = acc_manager
         self.login_function = login_function
         self.emp_user = str()
         self.emp_password = str()
-            
-        
-    def emp_user_validate (self, field_inst:MDTextField) -> None:
+
+    def emp_user_validate(self, field_inst: MDTextField) -> None:
         self.emp_user = field_inst.text
         self.emp_password_entry.focus = True
         return
-    
-    def emp_password_validate (self, field_inst:MDTextField) -> None:
+
+    def emp_password_validate(self, field_inst: MDTextField) -> None:
         self.emp_password = field_inst.text
         self._validate()
         return
-        
-    def emp_login (self) -> None:
+
+    def emp_login(self) -> None:
         if self.emp_user and self.emp_password:
             self._validate()
-        
-    def _validate (self):
-        self.login_function(self.emp_user,self.emp_password)
-        
+
+    def _validate(self):
+        self.login_function(self.emp_user, self.emp_password)
+
+
 class AdminCreationForm (MDBoxLayout):
     adm_name_entry = ObjectProperty()
     adm_password_entry = ObjectProperty()
-    
-    def __init__ (self,acc_manager,adm_panelopen_function) -> None:
-        super (AdminCreationForm,self).__init__()
+
+    def __init__(self, acc_manager, adm_panelopen_function) -> None:
+        super(AdminCreationForm, self).__init__()
         self.acc_manager = acc_manager
         self.adm_panelopen_function = adm_panelopen_function
         self.adm_name = str()
         self.adm_password = str()
-        
-        
-    def adm_name_validate (self,field_inst:MDTextField) -> None:
+
+    def adm_name_validate(self, field_inst: MDTextField) -> None:
         self.adm_name = field_inst.text
         self.adm_password_entry.focus = True
         return
-       
-    def adm_password_validate (self,field_inst:MDTextField) -> None:
+
+    def adm_password_validate(self, field_inst: MDTextField) -> None:
         self.adm_password = field_inst.text
         self.createAdmin()
         return
-    
-    def createAdmin (self) -> None:
+
+    def createAdmin(self) -> None:
         if self.adm_name and self.adm_password:
-            self.adm_panelopen_function(self.adm_name,self.adm_password)
+            self.adm_panelopen_function(self.adm_name, self.adm_password)
         else:
             self.adm_name = self.adm_name_entry.text
             self.adm_password = self.adm_password_entry.text
-            self.adm_panelopen_function(self.adm_name,self.adm_password)
+            self.adm_panelopen_function(self.adm_name, self.adm_password)
+
 
 class LoginMenu (MDDropdownMenu):
-    
-    def __init__(self,adm_panelopen_function):
+
+    def __init__(self, adm_panelopen_function):
         self.adm_panelopen_function = adm_panelopen_function
- 
+
+
 class LoginMenuItem(OneLineIconListItem):
     pass
-#============================== Testing ==========================================
+
+
+# ============================== Testing ==========================================
 if __name__ == "__main__":
-    
+
     accman = AccountManager(Path(os.getcwd()))
-    
-    def logfunc (name,password):
+
+    def logfunc(name, password):
         print("logging...")
-        
-    def AdmCreateFunc (name,password):
+
+    def AdmCreateFunc(name, password):
         print("creating admin...")
-        accman.create(name,password,admin = True)
-        
+        accman.create(name, password, admin=True)
+
     class TestApp(MDApp):
         def __init__(self):
-            super(TestApp,self).__init__()
+            super(TestApp, self).__init__()
             self.theme_cls.primary_palette = "DeepOrange"
-            
-        def build (self):
-            return LoginPage(accman,logfunc,AdmCreateFunc)
-            
+
+        def build(self):
+            return LoginPage(accman, logfunc, AdmCreateFunc)
+
     TestApp().run()
