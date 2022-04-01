@@ -57,7 +57,7 @@ page_layout = r"""
         text:"login"
         on_release:loginform.emp_login()
         size_hint_x:1
-        
+
 <AdminCreationForm>:
     id:admform
     orientation:"vertical"
@@ -89,10 +89,10 @@ page_layout = r"""
         text:"create"
         on_release:admform.createAdmin()
         size_hint_x:1
-        
+
 <LoginMenuItem>:
     text:self.text
-    
+
 """
 
 Builder.load_string(page_layout)
