@@ -9,10 +9,12 @@ from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDFloatingActionButton
 from kivymd.uix.floatlayout import MDFloatLayout
-from kivymd.uix.list import IconLeftWidget, OneLineIconListItem
+from kivymd.uix.list import IconLeftWidget
+from kivymd.uix.list import OneLineIconListItem
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.textfield import MDTextField
-from salesmanager.system.appstorage import AccountManager, AdminAccount
+from salesmanager.system.appstorage import AccountManager
+from salesmanager.system.appstorage import AdminAccount
 
 # part of testing code.
 sys.path.append(r"C:\Users\user\Desktop\OpenSourceCode\kozesa-BMS\sales-manager")
