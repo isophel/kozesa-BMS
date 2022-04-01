@@ -18,7 +18,7 @@ if platform.system() == "Windows":
             break
 
     if APP_FOLDER is None:
-        ap = localappdata/K_SALES
+        ap = localappdata / K_SALES
         ap.mkdir()
         APP_FOLDER = ap
 else:
@@ -26,19 +26,16 @@ else:
 
 
 class BaseAccount:
-
     def __init__(self, acc_file: Path):
         self.acc_file = acc_file
 
 
 class AdminAccount(BaseAccount):
-
     def __init__(self, acc_file: Path):
         super(AdminAccount, self).__init__(acc_file)
 
 
 class EmployeeAccount(BaseAccount):
-
     def __init__(self, acc_file: Path):
         super(EmployeeAccount, self).__init__(acc_file)
 
@@ -70,18 +67,23 @@ class AccountManager:
         return self._setup
 
     def create(self, user_name: str, password: str, *, admin=False) -> BaseAccount:
-        """ Use the user_name and password to create an account file.
-            The username and password are hashed using blake2b. The result is
-            combined and separated by a hyphen.
+        """Use the user_name and password to create an account file.
+        The username and password are hashed using blake2b. The result is
+        combined and separated by a hyphen.
         """
 
         user_name_enc = blake2b(user_name.encode(), digest_size=10).hexdigest()
         password_enc = blake2b(password.encode(), digest_size=10).hexdigest()
-        if ((login_dets := (user_name_enc, password_enc)) in self._accounts or login_dets in self._admin_account):
+        if (
+            login_dets := (user_name_enc, password_enc)
+        ) in self._accounts or login_dets in self._admin_account:
             return None
-        acc_name = "-".join([user_name_enc, password_enc]
-                            ) if admin is False else "-".join(["ADMIN", user_name_enc, password_enc])
-        new_acc_file = self.account_dir/acc_name
+        acc_name = (
+            "-".join([user_name_enc, password_enc])
+            if admin is False
+            else "-".join(["ADMIN", user_name_enc, password_enc])
+        )
+        new_acc_file = self.account_dir / acc_name
         os.open(str(new_acc_file), os.O_CREAT)
         if admin:
             if self._setup:
@@ -100,12 +102,15 @@ class AccountManager:
         user_name_enc = blake2b(user_name.encode(), digest_size=10).hexdigest()
         password_enc = blake2b(password.encode(), digest_size=10).hexdigest()
         if admin:
-            admin_acc = self._admin_account[(user_name_enc, password_enc)] if (
-                user_name_enc, password_enc) in self._admin_account else None
+            admin_acc = (
+                self._admin_account[(user_name_enc, password_enc)]
+                if (user_name_enc, password_enc) in self._admin_account
+                else None
+            )
             return admin_acc
         for login_dets in self._accounts:
             enc_user, enc_pass = login_dets
-            if (user_name_enc == enc_user and password_enc == enc_pass):
+            if user_name_enc == enc_user and password_enc == enc_pass:
                 return Account(self.accounts[login_dets])
         return None
 
@@ -121,8 +126,7 @@ class AccountManager:
                 user_name, pass_word = acc_name.split("-")
             except ValueError:
                 if acc_name.startswith("ADMIN"):
-                    admin_name, admin_pass = acc_name.lstrip(
-                        "ADMIN-").split("-")
+                    admin_name, admin_pass = acc_name.lstrip("ADMIN-").split("-")
                     self._admin_account[(admin_name, admin_pass)] = acc_path
                     self._setup = True
             else:

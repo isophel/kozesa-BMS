@@ -14,9 +14,9 @@ from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.list import OneLineIconListItem, IconLeftWidget
 
 import sys
+
 # part of testing code.
-sys.path.append(
-    r"C:\Users\user\Desktop\OpenSourceCode\kozesa-BMS\sales-manager")
+sys.path.append(r"C:\Users\user\Desktop\OpenSourceCode\kozesa-BMS\sales-manager")
 
 
 # =================== Testing ===================================
@@ -97,24 +97,24 @@ page_layout = r"""
 Builder.load_string(page_layout)
 
 
-class LoginPage (MDFloatLayout):
+class LoginPage(MDFloatLayout):
     def __init__(self, acc_manager, login_function, adm_panelopen_function):
         super(LoginPage, self).__init__()
         self.acc_manager = acc_manager
         if self.acc_manager.setup:
             self.login_menu = LoginMenu(adm_panelopen_function)
-            self.menu_button = MDFloatingActionButton(pos_hint={"x": 0.9, "y": 0.1},
-                                                      icon="format-list-bulleted",
-                                                      on_release=lambda inst: self.login_menu.open()
-                                                      )
+            self.menu_button = MDFloatingActionButton(
+                pos_hint={"x": 0.9, "y": 0.1},
+                icon="format-list-bulleted",
+                on_release=lambda inst: self.login_menu.open(),
+            )
             self.add_widget(LoginForm(acc_manager, login_function))
             self.add_widget(self.menu_button)
         else:
-            self.add_widget(AdminCreationForm(
-                acc_manager, adm_panelopen_function))
+            self.add_widget(AdminCreationForm(acc_manager, adm_panelopen_function))
 
 
-class LoginForm (MDBoxLayout):
+class LoginForm(MDBoxLayout):
     emp_user_entry = ObjectProperty()
     emp_password_entry = ObjectProperty()
 
@@ -143,7 +143,7 @@ class LoginForm (MDBoxLayout):
         self.login_function(self.emp_user, self.emp_password)
 
 
-class AdminCreationForm (MDBoxLayout):
+class AdminCreationForm(MDBoxLayout):
     adm_name_entry = ObjectProperty()
     adm_password_entry = ObjectProperty()
 
@@ -173,8 +173,7 @@ class AdminCreationForm (MDBoxLayout):
             self.adm_panelopen_function(self.adm_name, self.adm_password)
 
 
-class LoginMenu (MDDropdownMenu):
-
+class LoginMenu(MDDropdownMenu):
     def __init__(self, adm_panelopen_function):
         self.adm_panelopen_function = adm_panelopen_function
 
