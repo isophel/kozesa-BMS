@@ -17,11 +17,10 @@ from salesmanager.system.appstorage import AccountManager
 from salesmanager.system.appstorage import AdminAccount
 
 # part of testing code.
-sys.path.append(r"C:\Users\user\Desktop\OpenSourceCode\kozesa-BMS\sales-manager")
-
+sys.path.append(
+    r"C:\Users\user\Desktop\OpenSourceCode\kozesa-BMS\sales-manager")
 
 # =================== Testing ===================================
-
 
 page_layout = r"""
 <LoginForm>:
@@ -99,20 +98,25 @@ Builder.load_string(page_layout)
 
 
 class LoginPage(MDFloatLayout):
+
     def __init__(self, acc_manager, login_function, adm_panelopen_function):
         super(LoginPage, self).__init__()
         self.acc_manager = acc_manager
         if self.acc_manager.setup:
             self.login_menu = LoginMenu(adm_panelopen_function)
             self.menu_button = MDFloatingActionButton(
-                pos_hint={"x": 0.9, "y": 0.1},
+                pos_hint={
+                    "x": 0.9,
+                    "y": 0.1
+                },
                 icon="format-list-bulleted",
                 on_release=lambda inst: self.login_menu.open(),
             )
             self.add_widget(LoginForm(acc_manager, login_function))
             self.add_widget(self.menu_button)
         else:
-            self.add_widget(AdminCreationForm(acc_manager, adm_panelopen_function))
+            self.add_widget(
+                AdminCreationForm(acc_manager, adm_panelopen_function))
 
 
 class LoginForm(MDBoxLayout):
@@ -175,6 +179,7 @@ class AdminCreationForm(MDBoxLayout):
 
 
 class LoginMenu(MDDropdownMenu):
+
     def __init__(self, adm_panelopen_function):
         self.adm_panelopen_function = adm_panelopen_function
 
@@ -196,6 +201,7 @@ if __name__ == "__main__":
         accman.create(name, password, admin=True)
 
     class TestApp(MDApp):
+
         def __init__(self):
             super(TestApp, self).__init__()
             self.theme_cls.primary_palette = "DeepOrange"
